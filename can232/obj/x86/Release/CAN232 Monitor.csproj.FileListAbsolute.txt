@@ -1,0 +1,9 @@
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\bin\Release\CAN232 Monitor.exe
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\bin\Release\CAN232 Monitor.pdb
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Release\CAN232_Monitor.Can232.resources
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Release\CAN232_Monitor.Properties.Resources.resources
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Release\CAN232 Monitor.exe
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Release\CAN232 Monitor.pdb

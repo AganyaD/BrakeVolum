@@ -1,0 +1,17 @@
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\bin\Debug\CAN232 Monitor.exe
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\bin\Debug\CAN232 Monitor.pdb
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Debug\CAN232_Monitor.Can232.resources
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Debug\CAN232_Monitor.Properties.Resources.resources
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Debug\CAN232 Monitor.exe
+C:\Arbete\C_Sharp\CAN232\CAN232\CAN232 Monitor\obj\x86\Debug\CAN232 Monitor.pdb
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\obj\x86\Debug\CAN232 Monitor.exe
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\obj\x86\Debug\CAN232 Monitor.pdb
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\bin\Debug\CAN232 Monitor.exe
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\bin\Debug\CAN232 Monitor.pdb
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\obj\x86\Debug\CAN232 Monitor.csprojResolveAssemblyReference.cache
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\obj\x86\Debug\CAN232_Monitor.Can232.resources
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\obj\x86\Debug\CAN232_Monitor.Properties.Resources.resources
+C:\Users\Aganya.D\Documents\Visual Studio 2013\Projects\can232\obj\x86\Debug\CAN232 Monitor.csproj.GenerateResource.Cache
