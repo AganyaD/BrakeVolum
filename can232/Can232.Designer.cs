@@ -409,7 +409,7 @@
             this.tbxID.Name = "tbxID";
             this.tbxID.Size = new System.Drawing.Size(60, 20);
             this.tbxID.TabIndex = 0;
-            this.tbxID.Text = "7DFh";
+            this.tbxID.Text = "7DF";
             this.tbxID.TextChanged += new System.EventHandler(this.tbxID_TextChanged);
             this.tbxID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbxID_KeyPress);
             this.tbxID.Leave += new System.EventHandler(this.tbxID_Leave);
@@ -603,6 +603,7 @@
             this.button1.TabIndex = 17;
             this.button1.Text = "Get Speed";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 

@@ -680,5 +680,14 @@ namespace CAN232_Monitor
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            tbxID.Text = "7DF";
+            numDlc.Text = "2";
+            tbxHex1.Text = "";
+            tbxHex1.Text = "";
+            
+        }
     }
 }
