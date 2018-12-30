@@ -38,6 +38,7 @@ namespace CAN232_Monitor
     {
         private static string receiveBuffer = "";
         string mesage = "";
+        List<string> idList = new List<string>();
 
         public Can232()
         {
@@ -157,7 +158,7 @@ namespace CAN232_Monitor
             }
             cmbComPort.SelectedIndex = 0;
             cmbComSpeed.SelectedIndex = 4;
-            cmbCanBitrate.SelectedIndex = 4;
+            cmbCanBitrate.SelectedIndex = 6;
 
         }
 
@@ -217,7 +218,20 @@ namespace CAN232_Monitor
                     //7E9h
                     //7EAh
                     //7EBh
-                    this.Invoke(new EventHandler(DisplayText));
+                    //if(receiveBuffer.Contains("t7E"))
+                        //this.Invoke(new EventHandler(DisplayText));
+
+                    string recive = "";
+                    if (receiveBuffer.ToUpper().Contains("7E8") 
+                        || receiveBuffer.ToUpper().Contains("7E9") 
+                        || receiveBuffer.ToUpper().Contains("7EA") 
+                        || receiveBuffer.ToUpper().Contains("7EB")
+                        || receiveBuffer.ToUpper().Contains("7EC")
+                        || receiveBuffer.ToUpper().Contains("7ED")
+                        || receiveBuffer.ToUpper().Contains("7EE")
+                        || receiveBuffer.ToUpper().Contains("04410C")
+                        || receiveBuffer.ToUpper().Contains("7EF"))
+                        this.Invoke(new EventHandler(DisplayText));
 
 
                     //string[] msgs = receiveBuffer.Split('\r');
@@ -616,6 +630,7 @@ namespace CAN232_Monitor
                 serialPort.Write("\r");
             }
             lblResult.Text = "Resulting command: " + canFrameData + "[CR]";
+            rtboxReceive.AppendText("Send: " + canFrameData + "\r");
         }
 
         private void btnTimeStampOn_Click(object sender, EventArgs e)
@@ -684,11 +699,34 @@ namespace CAN232_Monitor
         private void button1_Click(object sender, EventArgs e)
         {
             tbxID.Text = "7DF";
-            numDlc.Text = "2";
-            tbxHex1.Text = "";
-            tbxHex1.Text = "";
+            numDlc.Text = "8";
+            tbxHex1.Text = "02";
+            tbxHex2.Text = "01";
+            tbxHex3.Text = "0D";
+            tbxHex4.Text = "55";
+            tbxHex5.Text = "55";
+            tbxHex6.Text = "55";
+            tbxHex7.Text = "55";
+            tbxHex8.Text = "55";
+
+            this.btnSendFrame_Click(new object(),new EventArgs());
             //test
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            tbxID.Text = "7DF";
+            numDlc.Text = "8";
+            tbxHex1.Text = "02";
+            tbxHex2.Text = "01";
+            tbxHex3.Text = "0C";
+            tbxHex4.Text = "55";
+            tbxHex5.Text = "55";
+            tbxHex6.Text = "55";
+            tbxHex7.Text = "55";
+            tbxHex8.Text = "55";
+            this.btnSendFrame_Click(new object(), new EventArgs());
         }
     }
 }

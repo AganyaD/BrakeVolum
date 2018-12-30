@@ -186,7 +186,7 @@
             this.grpboxCanCommands.Controls.Add(this.label1);
             this.grpboxCanCommands.Controls.Add(this.cmbCanBitrate);
             this.grpboxCanCommands.Enabled = false;
-            this.grpboxCanCommands.Location = new System.Drawing.Point(353, 111);
+            this.grpboxCanCommands.Location = new System.Drawing.Point(353, 110);
             this.grpboxCanCommands.Name = "grpboxCanCommands";
             this.grpboxCanCommands.Size = new System.Drawing.Size(173, 301);
             this.grpboxCanCommands.TabIndex = 2;
@@ -613,6 +613,7 @@
             this.button2.TabIndex = 18;
             this.button2.Text = "Get Rpm";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
