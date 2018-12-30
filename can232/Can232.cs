@@ -207,24 +207,29 @@ namespace CAN232_Monitor
         {
             while (serialPort.IsOpen)
             {
-                if (serialPort.BytesToWrite>0)
+                receiveBuffer = serialPort.ReadExisting();
+
+                if (receiveBuffer != "")
                 {
-                    receiveBuffer = serialPort.ReadExisting();
+                    mesage = receiveBuffer;
 
                     //7E8h
                     //7E9h
                     //7EAh
                     //7EBh
-                    string[] msgs = receiveBuffer.Split('\r');
+                    this.Invoke(new EventHandler(DisplayText));
 
-                    foreach (string msg in msgs)
-                    {
-                        mesage = msg;
-                        if (msg.Contains("7E"))
-                            this.Invoke(new EventHandler(DisplayText));
-                    }
 
-                    
+                    //string[] msgs = receiveBuffer.Split('\r');
+
+                    //foreach (string msg in msgs)
+                    //{
+                    //    mesage = msg;
+                    //    if (msg.Contains("7E"))
+                    //        this.Invoke(new EventHandler(DisplayText));
+                    //}
+
+                    receiveBuffer = "";
 
 
                 }
