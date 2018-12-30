@@ -687,7 +687,6 @@ namespace CAN232_Monitor
             numDlc.Text = "2";
             tbxHex1.Text = "";
             tbxHex1.Text = "";
-
             
         }
     }
