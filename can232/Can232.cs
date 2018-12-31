@@ -39,6 +39,8 @@ namespace CAN232_Monitor
         private static string receiveBuffer = "";
         string mesage = "";
         bool sendSpeedQury = false;
+        double lastSpeed = 0;
+        double lastSpeedTime = 0;
         List<string> inFramList = new List<string>();
 
         public Can232()
@@ -241,12 +243,36 @@ namespace CAN232_Monitor
 
                         for (int i = 0; i < limit; i++)
                         {
-                            if (split[i].Contains("t7E"))
+                            string mess = split[i];
+                            if (mess.Contains("t7E"))
                             {
-                                inFramList.Add(split[i]);
-                                label3.Invoke(new Action(() => label3.Text = split[i]));
+                                inFramList.Add(mess);
+                                //t7E8803410D0055555555
+                                string t = mess.Substring(9, 2);
+                                if (mess.Substring(9, 2) == "0D")
+                                {
+                                    double speedData = Convert.ToInt16(mess.Substring(11, 2), 16);
+                                    t = mess.Substring(mess.Length - 4, 4);
+                                    double speedDataTitme = (double)Convert.ToInt16(mess.Substring(mess.Length - 4, 4), 16) / 1000;
+                                    string toText = speedData.ToString();
+
+                                    label3.Invoke(new Action(() => label3.Text = toText));
+                                    double acc = (double)(speedData - lastSpeed) / (double)(speedDataTitme - lastSpeedTime);
+                                    acc = (double)acc * 100;
+                                    label4.Invoke(new Action(() => label4.Text = acc.ToString()));
+
+                                    lastSpeedTime = speedDataTitme;
+                                    lastSpeed = speedData;
+                                }
+
+                                //this.Invoke(new EventHandler(DisplayText));
+
                             }
                         }
+
+                    }
+                    else
+                    {
 
                     }
 
@@ -273,7 +299,7 @@ namespace CAN232_Monitor
                     this.Invoke(new EventHandler(DisplayText));
 
 
-                    
+
 
 
                     //string[] msgs = receiveBuffer.Split('\r');
@@ -777,7 +803,7 @@ namespace CAN232_Monitor
         
         private void button1_Click(object sender, EventArgs e)
         {
-            
+
 
             //tbxID.Text = "7DF";
             //numDlc.Text = "8";
@@ -847,6 +873,11 @@ namespace CAN232_Monitor
         }
 
         private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_TextChanged(object sender, EventArgs e)
         {
 
         }
