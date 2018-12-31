@@ -38,12 +38,14 @@ namespace CAN232_Monitor
     {
         private static string receiveBuffer = "";
         string mesage = "";
-        List<string> idList = new List<string>();
+        bool sendSpeedQury = false;
+        List<string> inFramList = new List<string>();
 
         public Can232()
         {
             InitializeComponent();
         }
+
 
         private void CheckHexValue(object sender, KeyPressEventArgs e, int maxLen)
         {
@@ -206,13 +208,47 @@ namespace CAN232_Monitor
 
         void ReadSerial()
         {
+            string temp = "";
+
             while (serialPort.IsOpen)
             {
-                receiveBuffer = serialPort.ReadExisting();
+                receiveBuffer += serialPort.ReadExisting();
 
                 if (receiveBuffer != "")
                 {
+                    receiveBuffer = temp + receiveBuffer;
+
                     mesage = receiveBuffer;
+                    temp = "";
+                    if (receiveBuffer.Contains("\r"))
+                    {
+                        string[] split = receiveBuffer.Split('\r');
+                        char[] chararry = receiveBuffer.ToArray();
+
+                        if(chararry[chararry.Count() -1 ] != '\r')
+                        {
+                            temp = split[split.Count() - 1];
+                        }
+
+                        int limit = split.Count();
+
+                        if (temp != "")
+                        {
+                            limit--;
+                            receiveBuffer = receiveBuffer.Substring(0, receiveBuffer.Length - temp.Length);
+                        }
+                            
+
+                        for (int i = 0; i < limit; i++)
+                        {
+                            if (split[i].Contains("t7E"))
+                            {
+                                inFramList.Add(split[i]);
+                                label3.Invoke(new Action(() => label3.Text = split[i]));
+                            }
+                        }
+
+                    }
 
                     //7E8h
                     //7E9h
@@ -221,17 +257,23 @@ namespace CAN232_Monitor
                     //if(receiveBuffer.Contains("t7E"))
                         //this.Invoke(new EventHandler(DisplayText));
 
+                    //string va = "7D";
+                    //byte hex = Convert.ToByte(va, 16);
+
                     string recive = "";
-                    if (receiveBuffer.ToUpper().Contains("7E8") 
-                        || receiveBuffer.ToUpper().Contains("7E9") 
-                        || receiveBuffer.ToUpper().Contains("7EA") 
-                        || receiveBuffer.ToUpper().Contains("7EB")
-                        || receiveBuffer.ToUpper().Contains("7EC")
-                        || receiveBuffer.ToUpper().Contains("7ED")
-                        || receiveBuffer.ToUpper().Contains("7EE")
-                        || receiveBuffer.ToUpper().Contains("04410C")
-                        || receiveBuffer.ToUpper().Contains("7EF"))
-                        this.Invoke(new EventHandler(DisplayText));
+                    //if (receiveBuffer.ToUpper().Contains("7E8") 
+                    //    || receiveBuffer.ToUpper().Contains("7E9") 
+                    //    || receiveBuffer.ToUpper().Contains("7EA") 
+                    //    || receiveBuffer.ToUpper().Contains("7EB")
+                    //    || receiveBuffer.ToUpper().Contains("7EC")
+                    //    || receiveBuffer.ToUpper().Contains("7ED")
+                    //    || receiveBuffer.ToUpper().Contains("7EE")
+                    //    || receiveBuffer.ToUpper().Contains("04410C")
+                    //    || receiveBuffer.ToUpper().Contains("7EF"))
+                    this.Invoke(new EventHandler(DisplayText));
+
+
+                    
 
 
                     //string[] msgs = receiveBuffer.Split('\r');
@@ -354,15 +396,26 @@ namespace CAN232_Monitor
             if (buffLen > 1)
             {
                 // More than one character
-                if ((buffPos = mesage.IndexOf("\r")) >= 0)
+
+                if (receiveBuffer.ToUpper().Contains("7E8")
+                       || receiveBuffer.ToUpper().Contains("7E9")
+                       || receiveBuffer.ToUpper().Contains("7EA")
+                       || receiveBuffer.ToUpper().Contains("7EB")
+                       || receiveBuffer.ToUpper().Contains("7EC")
+                       || receiveBuffer.ToUpper().Contains("7ED")
+                       || receiveBuffer.ToUpper().Contains("7EE")
+                       || receiveBuffer.ToUpper().Contains("7EF"))
                 {
-                    rtboxReceive.AppendText(mesage.Substring(0, buffPos));
-                    rtboxReceive.AppendText("[CR]");
-                    rtboxReceive.AppendText(mesage.Substring(buffPos, (buffLen - buffPos)));
-                }
-                else
-                {
-                    rtboxReceive.AppendText(mesage);
+                    if ((buffPos = mesage.IndexOf("\r")) >= 0)
+                    {
+                        rtboxReceive.AppendText(mesage.Substring(0, buffPos));
+                        rtboxReceive.AppendText("[CR]");
+                        rtboxReceive.AppendText(mesage.Substring(buffPos, (buffLen - buffPos)));
+                    }
+                    else
+                    {
+                        rtboxReceive.AppendText(mesage);
+                    }
                 }
             }
             else
@@ -630,6 +683,7 @@ namespace CAN232_Monitor
                 serialPort.Write("\r");
             }
             lblResult.Text = "Resulting command: " + canFrameData + "[CR]";
+
             rtboxReceive.AppendText("Send: " + canFrameData + "\r");
         }
 
@@ -696,20 +750,83 @@ namespace CAN232_Monitor
 
         }
 
+        string ID = "7DF";
+        string DLC = "8";
+        string by1 = "55";
+        string by2 = "55";
+        string by3 = "55";
+        string by4 = "55";
+        string by5 = "55";
+        string by6 = "55";
+        string by7 = "55";
+        string by8 = "55";
+
+        void SetFrame(object s, EventArgs e)
+        {
+            tbxID.Text = ID;// "7DF";
+            numDlc.Text = DLC;// "8";
+            tbxHex1.Text = by1;// "02";
+            tbxHex2.Text = by2;//"01";
+            tbxHex3.Text = by3;//"0D";
+            tbxHex4.Text = by4;//"55";
+            tbxHex5.Text = by5;//"55";
+            tbxHex6.Text = by6;//"55";
+            tbxHex7.Text = by7;//"55";
+            tbxHex8.Text = by8;//"55";
+        }
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            tbxID.Text = "7DF";
-            numDlc.Text = "8";
-            tbxHex1.Text = "02";
-            tbxHex2.Text = "01";
-            tbxHex3.Text = "0D";
-            tbxHex4.Text = "55";
-            tbxHex5.Text = "55";
-            tbxHex6.Text = "55";
-            tbxHex7.Text = "55";
-            tbxHex8.Text = "55";
+            
 
-            this.btnSendFrame_Click(new object(),new EventArgs());
+            //tbxID.Text = "7DF";
+            //numDlc.Text = "8";
+            //tbxHex1.Text = "02";
+            //tbxHex2.Text = "01";
+            //tbxHex3.Text = "0D";
+            //tbxHex4.Text = "55";
+            //tbxHex5.Text = "55";
+            //tbxHex6.Text = "55";
+            //tbxHex7.Text = "55";
+            //tbxHex8.Text = "55";
+            button1.Text = "Stop";
+            if (sendSpeedQury)
+            {
+                sendSpeedQury = false;
+                button1.Text = "Get Speed";
+            }
+            else
+            {
+                sendSpeedQury = true;
+                btnSendFrame.Enabled = false;
+                new System.Threading.Thread(() =>
+                {
+                    System.Threading.Thread.CurrentThread.IsBackground = true;
+
+                    while (sendSpeedQury)
+                    {
+                        ID = "7DF";
+                        DLC = "8";
+                        by1 = "02";
+                        by2 = "01";
+                        by3 = "0D";
+                        by4 = "55";
+                        by5 = "55";
+                        by6 = "55";
+                        by7 = "55";
+                        by8 = "55";
+                        this.Invoke(new EventHandler(SetFrame));
+                        this.Invoke(new EventHandler(btnSendFrame_Click));
+                        //this.btnSendFrame_Click(new object(), new EventArgs());
+                        System.Threading.Thread.Sleep(100);
+                    }
+
+                    btnSendFrame.Invoke(new Action(() => btnSendFrame.Enabled = true));
+
+                }).Start();
+
+            }
+            
             //test
 
         }
@@ -727,6 +844,11 @@ namespace CAN232_Monitor
             tbxHex7.Text = "55";
             tbxHex8.Text = "55";
             this.btnSendFrame_Click(new object(), new EventArgs());
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

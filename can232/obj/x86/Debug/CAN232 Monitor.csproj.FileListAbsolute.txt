@@ -32,3 +32,11 @@ C:\Users\USER\Desktop\AganyaDejen\Git\speedReader\can232\obj\x86\Debug\CAN232 Mo
 C:\Users\USER\Desktop\AganyaDejen\Git\speedReader\can232\obj\x86\Debug\CAN232 Monitor.pdb
 C:\Users\USER\Desktop\AganyaDejen\Git\speedReader\can232\bin\Debug\CAN232 Monitor.exe
 C:\Users\USER\Desktop\AganyaDejen\Git\speedReader\can232\bin\Debug\CAN232 Monitor.pdb
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\obj\x86\Debug\CAN232 Monitor.exe
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\obj\x86\Debug\CAN232 Monitor.pdb
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\bin\Debug\CAN232 Monitor.exe
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\bin\Debug\CAN232 Monitor.pdb
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\obj\x86\Debug\CAN232 Monitor.csprojResolveAssemblyReference.cache
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\obj\x86\Debug\CAN232_Monitor.Can232.resources
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\obj\x86\Debug\CAN232_Monitor.Properties.Resources.resources
+C:\Users\Aganya.D\Desktop\GitT\BrakeVolum\can232\obj\x86\Debug\CAN232 Monitor.csproj.GenerateResource.Cache
