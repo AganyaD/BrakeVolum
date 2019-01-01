@@ -85,26 +85,35 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.picture0 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.picture1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.textBox9 = new System.Windows.Forms.TextBox();
             this.grpboxComPort.SuspendLayout();
             this.grpboxCanCommands.SuspendLayout();
             this.grpboxCanFrameTransmit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDlc)).BeginInit();
             this.grpboxCanFrameReceive.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picture0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picture1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             this.SuspendLayout();
@@ -632,9 +641,8 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 18;
-            this.button2.Text = "Get Rpm";
+            this.button2.Text = "Test";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
@@ -717,83 +725,173 @@
             this.label5.Text = "Breke (Km/h)/s";
             this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
-            // picture0
+            // pictureBox1
             // 
-            this.picture0.Location = new System.Drawing.Point(583, 411);
-            this.picture0.Name = "picture0";
-            this.picture0.Size = new System.Drawing.Size(275, 27);
-            this.picture0.TabIndex = 27;
-            this.picture0.TabStop = false;
+            this.pictureBox1.Image = global::CAN232_Monitor.Properties.Resources.Acc;
+            this.pictureBox1.Location = new System.Drawing.Point(577, 391);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox1.TabIndex = 27;
+            this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(583, 247);
+            this.pictureBox2.Image = global::CAN232_Monitor.Properties.Resources.cruse;
+            this.pictureBox2.Location = new System.Drawing.Point(577, 364);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(275, 27);
+            this.pictureBox2.Size = new System.Drawing.Size(311, 21);
             this.pictureBox2.TabIndex = 28;
             this.pictureBox2.TabStop = false;
             // 
             // pictureBox3
             // 
-            this.pictureBox3.Location = new System.Drawing.Point(583, 280);
+            this.pictureBox3.Image = global::CAN232_Monitor.Properties.Resources.brake_1;
+            this.pictureBox3.Location = new System.Drawing.Point(577, 337);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(275, 27);
+            this.pictureBox3.Size = new System.Drawing.Size(311, 21);
             this.pictureBox3.TabIndex = 29;
             this.pictureBox3.TabStop = false;
             // 
             // pictureBox4
             // 
-            this.pictureBox4.Location = new System.Drawing.Point(583, 313);
+            this.pictureBox4.Image = global::CAN232_Monitor.Properties.Resources.brake_2;
+            this.pictureBox4.Location = new System.Drawing.Point(577, 310);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(275, 27);
+            this.pictureBox4.Size = new System.Drawing.Size(311, 21);
             this.pictureBox4.TabIndex = 30;
             this.pictureBox4.TabStop = false;
             // 
             // pictureBox5
             // 
-            this.pictureBox5.Location = new System.Drawing.Point(583, 346);
+            this.pictureBox5.Image = global::CAN232_Monitor.Properties.Resources.brake_3;
+            this.pictureBox5.Location = new System.Drawing.Point(577, 283);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(275, 27);
+            this.pictureBox5.Size = new System.Drawing.Size(311, 21);
             this.pictureBox5.TabIndex = 31;
             this.pictureBox5.TabStop = false;
             // 
-            // picture1
+            // pictureBox6
             // 
-            this.picture1.Location = new System.Drawing.Point(583, 379);
-            this.picture1.Name = "picture1";
-            this.picture1.Size = new System.Drawing.Size(275, 27);
-            this.picture1.TabIndex = 32;
-            this.picture1.TabStop = false;
+            this.pictureBox6.Image = global::CAN232_Monitor.Properties.Resources.brake_4;
+            this.pictureBox6.Location = new System.Drawing.Point(577, 256);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox6.TabIndex = 32;
+            this.pictureBox6.TabStop = false;
             // 
             // pictureBox7
             // 
-            this.pictureBox7.Location = new System.Drawing.Point(583, 214);
+            this.pictureBox7.Image = global::CAN232_Monitor.Properties.Resources.brake_5;
+            this.pictureBox7.Location = new System.Drawing.Point(577, 229);
             this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(275, 27);
+            this.pictureBox7.Size = new System.Drawing.Size(311, 21);
             this.pictureBox7.TabIndex = 33;
             this.pictureBox7.TabStop = false;
             // 
             // pictureBox8
             // 
-            this.pictureBox8.Location = new System.Drawing.Point(583, 181);
+            this.pictureBox8.Image = global::CAN232_Monitor.Properties.Resources.brake_6;
+            this.pictureBox8.Location = new System.Drawing.Point(577, 192);
             this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(275, 27);
+            this.pictureBox8.Size = new System.Drawing.Size(311, 31);
             this.pictureBox8.TabIndex = 34;
             this.pictureBox8.TabStop = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(533, 391);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(38, 20);
+            this.textBox1.TabIndex = 35;
+            this.textBox1.Text = "255";
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(532, 364);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(38, 20);
+            this.textBox2.TabIndex = 36;
+            this.textBox2.Text = "2";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(533, 338);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(38, 20);
+            this.textBox3.TabIndex = 37;
+            this.textBox3.Text = "-2";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(533, 311);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(38, 20);
+            this.textBox4.TabIndex = 38;
+            this.textBox4.Text = "-4";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(533, 283);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(38, 20);
+            this.textBox5.TabIndex = 39;
+            this.textBox5.Text = "-6";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(532, 257);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(38, 20);
+            this.textBox6.TabIndex = 40;
+            this.textBox6.Text = "-8";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(533, 231);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(38, 20);
+            this.textBox7.TabIndex = 41;
+            this.textBox7.Text = "-10";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(532, 205);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(38, 20);
+            this.textBox8.TabIndex = 42;
+            this.textBox8.Text = "-15";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(562, 85);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(32, 20);
+            this.textBox9.TabIndex = 43;
+            this.textBox9.Text = "0";
             // 
             // Can232
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(930, 466);
+            this.Controls.Add(this.textBox9);
+            this.Controls.Add(this.textBox8);
+            this.Controls.Add(this.textBox7);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.pictureBox8);
             this.Controls.Add(this.pictureBox7);
-            this.Controls.Add(this.picture1);
+            this.Controls.Add(this.pictureBox6);
             this.Controls.Add(this.pictureBox5);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.picture0);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
@@ -825,12 +923,12 @@
             this.grpboxCanFrameReceive.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picture0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picture1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             this.ResumeLayout(false);
@@ -896,14 +994,24 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.PictureBox picture0;
+        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.PictureBox pictureBox5;
-        private System.Windows.Forms.PictureBox picture1;
+        private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.PictureBox pictureBox7;
         private System.Windows.Forms.PictureBox pictureBox8;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textBox9;
+
     }
 }
 

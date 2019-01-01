@@ -41,6 +41,7 @@ namespace CAN232_Monitor
         bool sendSpeedQury = false;
         double lastSpeed = 0;
         double lastSpeedTime = 0;
+        double acc = 0.0;
         List<string> inFramList = new List<string>();
 
         public Can232()
@@ -208,6 +209,8 @@ namespace CAN232_Monitor
             }
         }
 
+
+
         void ReadSerial()
         {
             string temp = "";
@@ -251,18 +254,28 @@ namespace CAN232_Monitor
                                 string t = mess.Substring(9, 2);
                                 if (mess.Substring(9, 2) == "0D")
                                 {
-                                    double speedData = Convert.ToInt16(mess.Substring(11, 2), 16);
+                                    double speedDataKmPerH = Convert.ToInt16(mess.Substring(11, 2), 16);
                                     t = mess.Substring(mess.Length - 4, 4);
-                                    double speedDataTitme = (double)Convert.ToInt16(mess.Substring(mess.Length - 4, 4), 16) / 1000;
-                                    string toText = speedData.ToString();
+                                    double speedDataTitmeS = (double)Convert.ToInt16(mess.Substring(mess.Length - 4, 4), 16) / 1000;
+                                    string toText = speedDataKmPerH.ToString();
 
                                     label3.Invoke(new Action(() => label3.Text = toText));
-                                    double acc = (double)(speedData - lastSpeed) / (double)(speedDataTitme - lastSpeedTime);
-                                    acc = (double)acc * 100;
-                                    label4.Invoke(new Action(() => label4.Text = acc.ToString()));
 
-                                    lastSpeedTime = speedDataTitme;
-                                    lastSpeed = speedData;
+                                    double temp_speedDataTitmeS = speedDataTitmeS;
+
+                                    if(speedDataTitmeS<lastSpeedTime)
+                                    {
+                                        temp_speedDataTitmeS += 60;
+                                    }
+
+                                    acc = (double)(speedDataKmPerH - lastSpeed) / (double)(temp_speedDataTitmeS - lastSpeedTime);
+                                    acc = (double)acc;
+                                    label4.Invoke(new Action(() => label4.Text = acc.ToString("F3")));
+
+                                    this.Invoke(new EventHandler(DisplayPics));
+
+                                    lastSpeedTime = speedDataTitmeS;
+                                    lastSpeed = speedDataKmPerH;
                                 }
 
                                 //this.Invoke(new EventHandler(DisplayText));
@@ -412,6 +425,66 @@ namespace CAN232_Monitor
             catch (System.TimeoutException)
             {
             }
+        }
+
+        private void DisplayPics(object s, EventArgs e)
+        {
+            double temp = 0;
+
+            temp = Convert.ToDouble(textBox1.Text);
+            if( acc<temp)
+                pictureBox1.Visible = true;
+            else
+                pictureBox1.Visible = false;
+
+            temp = Convert.ToDouble(textBox2.Text);
+            if (acc < temp)
+                pictureBox2.Visible = true;
+            else
+                pictureBox2.Visible = false;
+
+            temp = Convert.ToDouble(textBox3.Text);
+            if (acc < temp)
+                pictureBox3.Visible = true;
+            else
+                pictureBox3.Visible = false;
+
+            temp = Convert.ToDouble(textBox4.Text);
+            if (acc < temp)
+                pictureBox4.Visible = true;
+            else
+                pictureBox4.Visible = false;
+
+            temp = Convert.ToDouble(textBox5.Text);
+            if (acc < temp)
+                pictureBox5.Visible = true;
+            else
+                pictureBox5.Visible = false;
+
+            temp = Convert.ToDouble(textBox6.Text);
+            if (acc < temp)
+                pictureBox6.Visible = true;
+            else
+                pictureBox6.Visible = false;
+
+            temp = Convert.ToDouble(textBox7.Text);
+            if (acc < temp)
+                pictureBox7.Visible = true;
+            else
+                pictureBox7.Visible = false;
+
+            temp = Convert.ToDouble(textBox8.Text);
+            if (acc < temp)
+                pictureBox8.Visible = true;
+            else
+                pictureBox8.Visible = false;
+
+
+            
+
+
+
+
         }
 
         private void DisplayText(object s, EventArgs e )
@@ -859,17 +932,8 @@ namespace CAN232_Monitor
 
         private void button2_Click(object sender, EventArgs e)
         {
-            tbxID.Text = "7DF";
-            numDlc.Text = "8";
-            tbxHex1.Text = "02";
-            tbxHex2.Text = "01";
-            tbxHex3.Text = "0C";
-            tbxHex4.Text = "55";
-            tbxHex5.Text = "55";
-            tbxHex6.Text = "55";
-            tbxHex7.Text = "55";
-            tbxHex8.Text = "55";
-            this.btnSendFrame_Click(new object(), new EventArgs());
+            acc = Convert.ToDouble(textBox9.Text);
+            this.Invoke(new EventHandler(DisplayPics));
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -878,6 +942,16 @@ namespace CAN232_Monitor
         }
 
         private void label4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox16_TextChanged(object sender, EventArgs e)
         {
 
         }
