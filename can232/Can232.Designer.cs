@@ -102,6 +102,16 @@
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.textBox9 = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.messgaeID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.grpboxComPort.SuspendLayout();
             this.grpboxCanCommands.SuspendLayout();
             this.grpboxCanFrameTransmit.SuspendLayout();
@@ -116,6 +126,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPort
@@ -603,7 +614,7 @@
             this.toolStripStatusLabelSpeed});
             this.statusStrip1.Location = new System.Drawing.Point(0, 442);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(930, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(1259, 24);
             this.statusStrip1.TabIndex = 16;
             this.statusStrip1.Text = "statusStrip";
             // 
@@ -730,7 +741,7 @@
             this.pictureBox1.Image = global::CAN232_Monitor.Properties.Resources.Acc;
             this.pictureBox1.Location = new System.Drawing.Point(577, 391);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox1.Size = new System.Drawing.Size(202, 21);
             this.pictureBox1.TabIndex = 27;
             this.pictureBox1.TabStop = false;
             // 
@@ -739,7 +750,7 @@
             this.pictureBox2.Image = global::CAN232_Monitor.Properties.Resources.cruse;
             this.pictureBox2.Location = new System.Drawing.Point(577, 364);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox2.Size = new System.Drawing.Size(202, 21);
             this.pictureBox2.TabIndex = 28;
             this.pictureBox2.TabStop = false;
             // 
@@ -748,7 +759,7 @@
             this.pictureBox3.Image = global::CAN232_Monitor.Properties.Resources.brake_1;
             this.pictureBox3.Location = new System.Drawing.Point(577, 337);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox3.Size = new System.Drawing.Size(202, 21);
             this.pictureBox3.TabIndex = 29;
             this.pictureBox3.TabStop = false;
             // 
@@ -757,7 +768,7 @@
             this.pictureBox4.Image = global::CAN232_Monitor.Properties.Resources.brake_2;
             this.pictureBox4.Location = new System.Drawing.Point(577, 310);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox4.Size = new System.Drawing.Size(202, 21);
             this.pictureBox4.TabIndex = 30;
             this.pictureBox4.TabStop = false;
             // 
@@ -766,7 +777,7 @@
             this.pictureBox5.Image = global::CAN232_Monitor.Properties.Resources.brake_3;
             this.pictureBox5.Location = new System.Drawing.Point(577, 283);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox5.Size = new System.Drawing.Size(202, 21);
             this.pictureBox5.TabIndex = 31;
             this.pictureBox5.TabStop = false;
             // 
@@ -775,7 +786,7 @@
             this.pictureBox6.Image = global::CAN232_Monitor.Properties.Resources.brake_4;
             this.pictureBox6.Location = new System.Drawing.Point(577, 256);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox6.Size = new System.Drawing.Size(202, 21);
             this.pictureBox6.TabIndex = 32;
             this.pictureBox6.TabStop = false;
             // 
@@ -784,7 +795,7 @@
             this.pictureBox7.Image = global::CAN232_Monitor.Properties.Resources.brake_5;
             this.pictureBox7.Location = new System.Drawing.Point(577, 229);
             this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(311, 21);
+            this.pictureBox7.Size = new System.Drawing.Size(202, 21);
             this.pictureBox7.TabIndex = 33;
             this.pictureBox7.TabStop = false;
             // 
@@ -793,7 +804,7 @@
             this.pictureBox8.Image = global::CAN232_Monitor.Properties.Resources.brake_6;
             this.pictureBox8.Location = new System.Drawing.Point(577, 192);
             this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(311, 31);
+            this.pictureBox8.Size = new System.Drawing.Size(202, 31);
             this.pictureBox8.TabIndex = 34;
             this.pictureBox8.TabStop = false;
             // 
@@ -870,11 +881,84 @@
             this.textBox9.TabIndex = 43;
             this.textBox9.Text = "0";
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.messgaeID,
+            this.Data1,
+            this.Data2,
+            this.Data3,
+            this.Data4,
+            this.Data5,
+            this.Data6,
+            this.Data7,
+            this.Data8});
+            this.dataGridView1.Location = new System.Drawing.Point(823, 27);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(425, 385);
+            this.dataGridView1.TabIndex = 44;
+            // 
+            // messgaeID
+            // 
+            this.messgaeID.HeaderText = "messgaeID";
+            this.messgaeID.Name = "messgaeID";
+            this.messgaeID.Width = 60;
+            // 
+            // Data1
+            // 
+            this.Data1.HeaderText = "Data1";
+            this.Data1.Name = "Data1";
+            this.Data1.Width = 40;
+            // 
+            // Data2
+            // 
+            this.Data2.HeaderText = "Data2";
+            this.Data2.Name = "Data2";
+            this.Data2.Width = 40;
+            // 
+            // Data3
+            // 
+            this.Data3.HeaderText = "Data3";
+            this.Data3.Name = "Data3";
+            this.Data3.Width = 40;
+            // 
+            // Data4
+            // 
+            this.Data4.HeaderText = "Data4";
+            this.Data4.Name = "Data4";
+            this.Data4.Width = 40;
+            // 
+            // Data5
+            // 
+            this.Data5.HeaderText = "Data5";
+            this.Data5.Name = "Data5";
+            this.Data5.Width = 40;
+            // 
+            // Data6
+            // 
+            this.Data6.HeaderText = "Data6";
+            this.Data6.Name = "Data6";
+            this.Data6.Width = 40;
+            // 
+            // Data7
+            // 
+            this.Data7.HeaderText = "Data7";
+            this.Data7.Name = "Data7";
+            this.Data7.Width = 40;
+            // 
+            // Data8
+            // 
+            this.Data8.HeaderText = "Data8";
+            this.Data8.Name = "Data8";
+            this.Data8.Width = 40;
+            // 
             // Can232
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(930, 466);
+            this.ClientSize = new System.Drawing.Size(1259, 466);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.textBox9);
             this.Controls.Add(this.textBox8);
             this.Controls.Add(this.textBox7);
@@ -931,6 +1015,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1011,7 +1096,16 @@
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.TextBox textBox9;
-
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn messgaeID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data8;
     }
 }
 

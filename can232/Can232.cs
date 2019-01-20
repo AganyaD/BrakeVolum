@@ -44,13 +44,58 @@ namespace CAN232_Monitor
         double acc = 0.0;
         List<string> inFramList = new List<string>();
 
+        public class CanMessageData
+        {
+            byte[] Data = new byte[8];
+
+            public CanMessageData(byte[] data)
+            {
+                Data = new byte[8];
+
+                for (int i = 0; i < 8; i++)
+                {
+                    Data[i] = 0;
+                }
+
+                for (int i =0; i < data.Length; i ++)
+                {
+                    Data[i] = data[i];
+                }
+            }
+
+            public byte GetByte (int index)
+            {
+                return Data[index];
+            }
+        }
+
+        public class CanMessage
+        {
+            int mesgId;
+            public CanMessageData date;
+
+            public CanMessage(int MessageId, CanMessageData Date)
+            {
+                mesgId = MessageId;
+                date = Date;
+            }
+
+            public int GetID()
+            {
+                return mesgId;
+            }
+
+        }
+
+        //Dictionary<int MessageId , CanMessageData data> messagesLog = 
+
         public Can232()
         {
             InitializeComponent();
         }
 
 
-        private void CheckHexValue(object sender, KeyPressEventArgs e, int maxLen)
+        public void CheckHexValue(object sender, KeyPressEventArgs e, int maxLen)
         {
             if ((sender as TextBox).TextLength < maxLen)
             {
@@ -80,7 +125,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void UpdateDataBoxes()
+        public void UpdateDataBoxes()
         {
             if (numDlc.Value < 8)
             {
@@ -155,7 +200,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void Can232_Load(object sender, EventArgs e)
+        public void Can232_Load(object sender, EventArgs e)
         {
             foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
             {
@@ -167,7 +212,7 @@ namespace CAN232_Monitor
 
         }
 
-        private void btnComOpen_Click(object sender, EventArgs e)
+        public void btnComOpen_Click(object sender, EventArgs e)
         {
             try
             {
@@ -211,7 +256,7 @@ namespace CAN232_Monitor
 
 
 
-        void ReadSerial()
+        public void ReadSerial()
         {
             string temp = "";
 
@@ -242,11 +287,12 @@ namespace CAN232_Monitor
                             limit--;
                             receiveBuffer = receiveBuffer.Substring(0, receiveBuffer.Length - temp.Length);
                         }
-                            
 
+                        
                         for (int i = 0; i < limit; i++)
                         {
                             string mess = split[i];
+                            //t7E8803410D0055555555
                             if (mess.Contains("t7E"))
                             {
                                 inFramList.Add(mess);
@@ -281,6 +327,24 @@ namespace CAN232_Monitor
                                 //this.Invoke(new EventHandler(DisplayText));
 
                             }
+
+                            // t 7E8 8 03 41 0D 00 55 55 55 55
+                            int mesid = Convert.ToInt16(mess.Substring(1, 3), 16);
+
+                            int lng = Convert.ToInt16(mess.Substring(4, 1), 16);
+
+                            byte[] data = new byte[lng];
+
+                            for (int indx=0; indx < lng; indx++)
+                            {
+                                data[indx] = Convert.ToByte(mess.Substring(5+i +(i*2), 2), 16);
+                            }
+
+                            CanMessageData candata ;
+                            candata = new CanMessageData(data);
+                            CanMessage message = new CanMessage(mesid, candata);
+
+                            datagridUpdataInfo(message);
                         }
 
                     }
@@ -300,6 +364,7 @@ namespace CAN232_Monitor
                     //byte hex = Convert.ToByte(va, 16);
 
                     string recive = "";
+
                     //if (receiveBuffer.ToUpper().Contains("7E8") 
                     //    || receiveBuffer.ToUpper().Contains("7E9") 
                     //    || receiveBuffer.ToUpper().Contains("7EA") 
@@ -309,20 +374,9 @@ namespace CAN232_Monitor
                     //    || receiveBuffer.ToUpper().Contains("7EE")
                     //    || receiveBuffer.ToUpper().Contains("04410C")
                     //    || receiveBuffer.ToUpper().Contains("7EF"))
+
                     this.Invoke(new EventHandler(DisplayText));
 
-
-
-
-
-                    //string[] msgs = receiveBuffer.Split('\r');
-
-                    //foreach (string msg in msgs)
-                    //{
-                    //    mesage = msg;
-                    //    if (msg.Contains("7E"))
-                    //        this.Invoke(new EventHandler(DisplayText));
-                    //}
 
                     receiveBuffer = "";
 
@@ -334,9 +388,64 @@ namespace CAN232_Monitor
         }
 
 
+        void datagridUpdataInfo(CanMessage canMsg)
+        {
+            //DataGridViewRow row = (DataGridViewRow)dataGridView1.Rows.
+            bool ee = false;
+
+            for (int i=0;i< dataGridView1.Rows.Count; i++)
+            {
+
+                DataGridViewRow row = (DataGridViewRow)dataGridView1.Rows[i].Clone();
+                dataGridView1.Rows.Remove(row);
+                row.DefaultCellStyle.BackColor = Color.White;
+                if (Convert.ToString(row.Cells[0].Value) == canMsg.GetID().ToString())
+                {
+                    ee = true;
+                    row.Cells[1].Value = canMsg.date.GetByte(0);
+                    row.Cells[2].Value = canMsg.date.GetByte(1);
+                    row.Cells[3].Value = canMsg.date.GetByte(2);
+                    row.Cells[4].Value = canMsg.date.GetByte(3);
+                    row.Cells[5].Value = canMsg.date.GetByte(4);
+                    row.Cells[6].Value = canMsg.date.GetByte(5);
+                    row.Cells[7].Value = canMsg.date.GetByte(6);
+                    row.Cells[8].Value = canMsg.date.GetByte(7);
+
+                    row.DefaultCellStyle.BackColor = Color.LightBlue;
+                }
+
+                dataGridView1.Rows.Add(row);
+            }
+
+            if(!ee)
+            {
+                DataGridViewRow newrow = (DataGridViewRow)dataGridView1.Rows[0].Clone();
+                newrow.Cells[0].Value = canMsg.GetID();
+                newrow.Cells[1].Value = canMsg.date.GetByte(0);
+                newrow.Cells[2].Value = canMsg.date.GetByte(1);
+                newrow.Cells[3].Value = canMsg.date.GetByte(2);
+                newrow.Cells[4].Value = canMsg.date.GetByte(3);
+                newrow.Cells[5].Value = canMsg.date.GetByte(4);
+                newrow.Cells[6].Value = canMsg.date.GetByte(5);
+                newrow.Cells[7].Value = canMsg.date.GetByte(6);
+                newrow.Cells[8].Value = canMsg.date.GetByte(7);
+                newrow.DefaultCellStyle.BackColor = Color.White;
+
+                dataGridView1.Rows.Add(newrow);
+            }
 
 
-        private void btnComClose_Click(object sender, EventArgs e)
+            dataGridView1.Invoke(new Action(() =>
+            {
+                dataGridView1.Update();
+                dataGridView1.Refresh();
+            }));
+
+        }
+
+
+
+        public void btnComClose_Click(object sender, EventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -352,7 +461,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void Can232_FormClosed(object sender, FormClosedEventArgs e)
+        public void Can232_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -360,7 +469,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void btnCanOpen_Click(object sender, EventArgs e)
+        public void btnCanOpen_Click(object sender, EventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -368,7 +477,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void btnCanClose_Click(object sender, EventArgs e)
+        public void btnCanClose_Click(object sender, EventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -376,7 +485,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void btnSetup_Click(object sender, EventArgs e)
+        public void btnSetup_Click(object sender, EventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -386,7 +495,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void btnCanVersion_Click(object sender, EventArgs e)
+        public void btnCanVersion_Click(object sender, EventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -394,7 +503,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void btnCanFlags_Click(object sender, EventArgs e)
+        public void btnCanFlags_Click(object sender, EventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -402,7 +511,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void btnSerNo_Click(object sender, EventArgs e)
+        public void btnSerNo_Click(object sender, EventArgs e)
         {
             if (serialPort.IsOpen)
             {
@@ -410,7 +519,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void serialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        public void serialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             try
             {
@@ -427,7 +536,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void DisplayPics(object s, EventArgs e)
+        public void DisplayPics(object s, EventArgs e)
         {
             double temp = 0;
 
@@ -487,7 +596,7 @@ namespace CAN232_Monitor
 
         }
 
-        private void DisplayText(object s, EventArgs e )
+        public void DisplayText(object s, EventArgs e )
         {
             int buffLen = mesage.Length;
             int buffPos = -1;
@@ -533,7 +642,7 @@ namespace CAN232_Monitor
             }
         }
 
-        private void tbxID_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxID_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (cboxExt.Checked == true)
             {
@@ -545,47 +654,47 @@ namespace CAN232_Monitor
             }
         }
 
-        private void tbxHex1_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex1_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxHex2_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex2_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxHex3_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex3_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxHex4_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex4_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxHex5_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex5_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxHex6_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex6_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxHex7_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex7_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxHex8_KeyPress(object sender, KeyPressEventArgs e)
+        public void tbxHex8_KeyPress(object sender, KeyPressEventArgs e)
         {
             CheckHexValue(sender, e, 2);
         }
 
-        private void tbxID_Leave(object sender, EventArgs e)
+        public void tbxID_Leave(object sender, EventArgs e)
         {
             if (cboxExt.Checked == true)
             {
@@ -640,27 +749,27 @@ namespace CAN232_Monitor
             (sender as TextBox).Text = (sender as TextBox).Text.ToUpper();
         }
 
-        private void tbxHex1_Leave(object sender, EventArgs e)
+        public void tbxHex1_Leave(object sender, EventArgs e)
         {
             (sender as TextBox).Text = (sender as TextBox).Text.ToUpper();
         }
 
-        private void tbxHex2_Leave(object sender, EventArgs e)
+        public void tbxHex2_Leave(object sender, EventArgs e)
         {
             (sender as TextBox).Text = (sender as TextBox).Text.ToUpper();
         }
 
-        private void tbxHex3_Leave(object sender, EventArgs e)
+        public void tbxHex3_Leave(object sender, EventArgs e)
         {
             (sender as TextBox).Text = (sender as TextBox).Text.ToUpper();
         }
 
-        private void tbxHex4_Leave(object sender, EventArgs e)
+        public void tbxHex4_Leave(object sender, EventArgs e)
         {
             (sender as TextBox).Text = (sender as TextBox).Text.ToUpper();
         }
 
-        private void tbxHex5_Leave(object sender, EventArgs e)
+        public void tbxHex5_Leave(object sender, EventArgs e)
         {
             (sender as TextBox).Text = (sender as TextBox).Text.ToUpper();
         }
