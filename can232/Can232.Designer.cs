@@ -205,7 +205,9 @@
             // cmbComPort
             // 
             this.cmbComPort.FormattingEnabled = true;
-            this.cmbComPort.Location = new System.Drawing.Point(6, 37);
+            this.cmbComPort.Items.AddRange(new object[] {
+            "COM0"});
+            this.cmbComPort.Location = new System.Drawing.Point(5, 37);
             this.cmbComPort.Name = "cmbComPort";
             this.cmbComPort.Size = new System.Drawing.Size(75, 21);
             this.cmbComPort.TabIndex = 0;
@@ -741,7 +743,7 @@
             this.pictureBox1.Image = global::CAN232_Monitor.Properties.Resources.Acc;
             this.pictureBox1.Location = new System.Drawing.Point(577, 391);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(202, 21);
+            this.pictureBox1.Size = new System.Drawing.Size(240, 21);
             this.pictureBox1.TabIndex = 27;
             this.pictureBox1.TabStop = false;
             // 
@@ -750,7 +752,7 @@
             this.pictureBox2.Image = global::CAN232_Monitor.Properties.Resources.cruse;
             this.pictureBox2.Location = new System.Drawing.Point(577, 364);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(202, 21);
+            this.pictureBox2.Size = new System.Drawing.Size(240, 21);
             this.pictureBox2.TabIndex = 28;
             this.pictureBox2.TabStop = false;
             // 
@@ -759,7 +761,7 @@
             this.pictureBox3.Image = global::CAN232_Monitor.Properties.Resources.brake_1;
             this.pictureBox3.Location = new System.Drawing.Point(577, 337);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(202, 21);
+            this.pictureBox3.Size = new System.Drawing.Size(240, 21);
             this.pictureBox3.TabIndex = 29;
             this.pictureBox3.TabStop = false;
             // 
@@ -768,7 +770,7 @@
             this.pictureBox4.Image = global::CAN232_Monitor.Properties.Resources.brake_2;
             this.pictureBox4.Location = new System.Drawing.Point(577, 310);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(202, 21);
+            this.pictureBox4.Size = new System.Drawing.Size(240, 21);
             this.pictureBox4.TabIndex = 30;
             this.pictureBox4.TabStop = false;
             // 
@@ -777,7 +779,7 @@
             this.pictureBox5.Image = global::CAN232_Monitor.Properties.Resources.brake_3;
             this.pictureBox5.Location = new System.Drawing.Point(577, 283);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(202, 21);
+            this.pictureBox5.Size = new System.Drawing.Size(240, 21);
             this.pictureBox5.TabIndex = 31;
             this.pictureBox5.TabStop = false;
             // 
@@ -786,7 +788,7 @@
             this.pictureBox6.Image = global::CAN232_Monitor.Properties.Resources.brake_4;
             this.pictureBox6.Location = new System.Drawing.Point(577, 256);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(202, 21);
+            this.pictureBox6.Size = new System.Drawing.Size(240, 21);
             this.pictureBox6.TabIndex = 32;
             this.pictureBox6.TabStop = false;
             // 
@@ -795,7 +797,7 @@
             this.pictureBox7.Image = global::CAN232_Monitor.Properties.Resources.brake_5;
             this.pictureBox7.Location = new System.Drawing.Point(577, 229);
             this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(202, 21);
+            this.pictureBox7.Size = new System.Drawing.Size(240, 21);
             this.pictureBox7.TabIndex = 33;
             this.pictureBox7.TabStop = false;
             // 
@@ -804,7 +806,7 @@
             this.pictureBox8.Image = global::CAN232_Monitor.Properties.Resources.brake_6;
             this.pictureBox8.Location = new System.Drawing.Point(577, 192);
             this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(202, 31);
+            this.pictureBox8.Size = new System.Drawing.Size(240, 31);
             this.pictureBox8.TabIndex = 34;
             this.pictureBox8.TabStop = false;
             // 
@@ -894,9 +896,9 @@
             this.Data6,
             this.Data7,
             this.Data8});
-            this.dataGridView1.Location = new System.Drawing.Point(823, 27);
+            this.dataGridView1.Location = new System.Drawing.Point(880, 27);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(425, 385);
+            this.dataGridView1.Size = new System.Drawing.Size(368, 385);
             this.dataGridView1.TabIndex = 44;
             // 
             // messgaeID

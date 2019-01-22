@@ -293,19 +293,27 @@ namespace CAN232_Monitor
                         {
                             string mess = split[i];
                             //t7E8803410D0055555555
-                            if (mess.Contains("t7E"))
+                            if (mess.Contains("t7E") || mess.Contains("t3E9"))
                             {
                                 inFramList.Add(mess);
                                 //t7E8803410D0055555555
                                 string t = mess.Substring(9, 2);
-                                if (mess.Substring(9, 2) == "0D")
+                                
                                 {
-                                    double speedDataKmPerH = Convert.ToInt16(mess.Substring(11, 2), 16);
+                                    double speedDataKmPerH = 0;
+                                    if (mess.Contains("t3E9"))
+                                    {
+                                        double speedDatamilsPerH = Convert.ToInt16(mess.Substring(5, 4), 16);
+                                        speedDataKmPerH = Convert.ToInt16((double)((double)speedDatamilsPerH / 100) / 0.62137);
+                                    }
+                                    else if (mess.Substring(9, 2) == "0D" && mess.Contains("t7E"))
+                                    {
+                                        speedDataKmPerH = Convert.ToInt16(mess.Substring(11, 2), 16);
+                                    }
+
                                     t = mess.Substring(mess.Length - 4, 4);
                                     double speedDataTitmeS = (double)Convert.ToInt16(mess.Substring(mess.Length - 4, 4), 16) / 1000;
                                     string toText = speedDataKmPerH.ToString();
-
-                                    label3.Invoke(new Action(() => label3.Text = toText));
 
                                     double temp_speedDataTitmeS = speedDataTitmeS;
 
@@ -315,10 +323,64 @@ namespace CAN232_Monitor
                                     }
 
                                     acc = (double)(speedDataKmPerH - lastSpeed) / (double)(temp_speedDataTitmeS - lastSpeedTime);
-                                    acc = (double)acc;
-                                    label4.Invoke(new Action(() => label4.Text = acc.ToString("F3")));
+                                    //acc = (double)acc;
 
-                                    this.Invoke(new EventHandler(DisplayPics));
+                                    new System.Threading.Thread(() =>
+                                    {
+                                        System.Threading.Thread.CurrentThread.IsBackground = true;
+
+                                        label3.Invoke(new Action(() => label3.Text = toText));
+
+                                        label4.Invoke(new Action(() => label4.Text = acc.ToString("F3")));
+
+                                        this.Invoke(new EventHandler(DisplayPics));
+
+                                    }).Start();
+
+                                    lastSpeedTime = speedDataTitmeS;
+                                    lastSpeed = speedDataKmPerH;
+                                }
+
+                                //this.Invoke(new EventHandler(DisplayText));
+
+                            }
+
+
+                            if (mess.Contains("t3E9") && false)
+                            {
+                                //01234 56 78 9  11 13 15 17 19 
+                                //t3E98 00 00 00 13 00 00 00 13
+                                string t = mess.Substring(9, 2);
+                                
+                                {
+                                    double speedDatamilsPerH = Convert.ToInt16(mess.Substring(5, 4), 16);
+                                    double speedDataKmPerH = (double)((double)speedDatamilsPerH / 100) / 0.62137;
+                                    t = mess.Substring(mess.Length - 4, 4);
+                                    double speedDataTitmeS = (double)Convert.ToInt16(mess.Substring(mess.Length - 4, 4), 16) / 1000;
+                                    string toText = speedDataKmPerH.ToString();
+                                    
+                                    double temp_speedDataTitmeS = speedDataTitmeS;
+
+                                    if (speedDataTitmeS < lastSpeedTime)
+                                    {
+                                        temp_speedDataTitmeS += 60;
+                                    }
+
+                                    acc = (double)(speedDataKmPerH - lastSpeed) / (double)(temp_speedDataTitmeS - lastSpeedTime);
+                                    //acc = (double)acc;
+
+                                    new System.Threading.Thread(() =>
+                                    {
+                                        System.Threading.Thread.CurrentThread.IsBackground = true;
+
+                                        label3.Invoke(new Action(() => label3.Text = toText));
+
+                                        label4.Invoke(new Action(() => label4.Text = acc.ToString("F3")));
+
+                                        this.Invoke(new EventHandler(DisplayPics));
+
+                                    }).Start();
+
 
                                     lastSpeedTime = speedDataTitmeS;
                                     lastSpeed = speedDataKmPerH;
@@ -329,22 +391,33 @@ namespace CAN232_Monitor
                             }
 
                             // t 7E8 8 03 41 0D 00 55 55 55 55
-                            int mesid = Convert.ToInt16(mess.Substring(1, 3), 16);
-
-                            int lng = Convert.ToInt16(mess.Substring(4, 1), 16);
-
-                            byte[] data = new byte[lng];
-
-                            for (int indx=0; indx < lng; indx++)
+                            //"t19D8C0003FFD000BD9FFCBA3"
+                            if (mess.Contains("t")&&false)
                             {
-                                data[indx] = Convert.ToByte(mess.Substring(5+i +(i*2), 2), 16);
+                                try
+                                {
+                                    int mesid = Convert.ToInt16(mess.Substring(1, 3), 16);
+
+                                    int lng = Convert.ToInt16(mess.Substring(4, 1), 16);
+
+                                    byte[] data = new byte[lng];
+
+                                    for (int indx = 0; indx < lng; indx++)
+                                    {
+                                        data[indx] = Convert.ToByte(mess.Substring(5 + indx + (indx * 2), 2), 16);
+                                    }
+
+                                    CanMessageData candata;
+                                    candata = new CanMessageData(data);
+                                    CanMessage message = new CanMessage(mesid, candata);
+
+                                    datagridUpdataInfo(message);
+                                }
+                                catch
+                                {
+
+                                }
                             }
-
-                            CanMessageData candata ;
-                            candata = new CanMessageData(data);
-                            CanMessage message = new CanMessage(mesid, candata);
-
-                            datagridUpdataInfo(message);
                         }
 
                     }
@@ -396,30 +469,34 @@ namespace CAN232_Monitor
             for (int i=0;i< dataGridView1.Rows.Count; i++)
             {
 
-                DataGridViewRow row = (DataGridViewRow)dataGridView1.Rows[i].Clone();
-                dataGridView1.Rows.Remove(row);
-                row.DefaultCellStyle.BackColor = Color.White;
-                if (Convert.ToString(row.Cells[0].Value) == canMsg.GetID().ToString())
+                DataGridViewRow row = (DataGridViewRow)dataGridView1.Rows[i];
+                if (row.Index > 0)
                 {
-                    ee = true;
-                    row.Cells[1].Value = canMsg.date.GetByte(0);
-                    row.Cells[2].Value = canMsg.date.GetByte(1);
-                    row.Cells[3].Value = canMsg.date.GetByte(2);
-                    row.Cells[4].Value = canMsg.date.GetByte(3);
-                    row.Cells[5].Value = canMsg.date.GetByte(4);
-                    row.Cells[6].Value = canMsg.date.GetByte(5);
-                    row.Cells[7].Value = canMsg.date.GetByte(6);
-                    row.Cells[8].Value = canMsg.date.GetByte(7);
+                    //dataGridView1.Rows.Remove(row);
+                    row.DefaultCellStyle.BackColor = Color.White;
+                    if (Convert.ToString(row.Cells[0].Value) == canMsg.GetID().ToString())
+                    {
+                        ee = true;
+                        row.Cells[1].Value = canMsg.date.GetByte(0);
+                        row.Cells[2].Value = canMsg.date.GetByte(1);
+                        row.Cells[3].Value = canMsg.date.GetByte(2);
+                        row.Cells[4].Value = canMsg.date.GetByte(3);
+                        row.Cells[5].Value = canMsg.date.GetByte(4);
+                        row.Cells[6].Value = canMsg.date.GetByte(5);
+                        row.Cells[7].Value = canMsg.date.GetByte(6);
+                        row.Cells[8].Value = canMsg.date.GetByte(7);
 
-                    row.DefaultCellStyle.BackColor = Color.LightBlue;
+                        row.DefaultCellStyle.BackColor = Color.LightBlue;
+                    }
+
+                    //dataGridView1.Rows.Add(row);
                 }
-
-                dataGridView1.Rows.Add(row);
             }
 
             if(!ee)
             {
                 DataGridViewRow newrow = (DataGridViewRow)dataGridView1.Rows[0].Clone();
+                //dataGridView1.Invoke(new Action(() => dataGridView1.Rows.Remove(newrow))) ;
                 newrow.Cells[0].Value = canMsg.GetID();
                 newrow.Cells[1].Value = canMsg.date.GetByte(0);
                 newrow.Cells[2].Value = canMsg.date.GetByte(1);
@@ -430,8 +507,17 @@ namespace CAN232_Monitor
                 newrow.Cells[7].Value = canMsg.date.GetByte(6);
                 newrow.Cells[8].Value = canMsg.date.GetByte(7);
                 newrow.DefaultCellStyle.BackColor = Color.White;
-
-                dataGridView1.Rows.Add(newrow);
+                dataGridView1.Invoke(new Action(() => this.dataGridView1.Rows.Add(canMsg.GetID(),
+                                                                                canMsg.date.GetByte(0),
+                                                                                canMsg.date.GetByte(1),
+                                                                                canMsg.date.GetByte(2),
+                                                                                canMsg.date.GetByte(3),
+                                                                                canMsg.date.GetByte(4),
+                                                                                canMsg.date.GetByte(5),
+                                                                                canMsg.date.GetByte(6),
+                                                                                canMsg.date.GetByte(7)
+                                                                                )));
+                
             }
 
 
