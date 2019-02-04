@@ -1,0 +1,286 @@
+
+Can bus Notes for Volt/Ampera
+
+CREDIT
+
+; Quite a few contributors, so please free to add/change as necessary.
+
+; RScott for http://www.evtools.info/ChevyVoltOBD2CAN.html and his initial work on this.
+; Mikeljo for his work on OVMS and decoding these messages.
+; Johannes for his work with Dashdaq, and OVMS.
+
+CAN BUSES
+
+http://www.evtools.info/ChevyVoltOBD2CAN.html
+
+The Volt has 2 connectors (the standard one on the drivers' side, and an extra auxillary one on the passengers' side), with a total of 5 buses:
+
+  OBD2 Location                 Pins    OBD2 Protocol                        Data Protocol      Speed      CAN ID  length   Use
+  Primary Data Link Connector   1       SAE J2411 (SWCAN)                    Low Speed GMLAN    33.3kbps   ???              Body Electrical Services
+  Primary Data Link Connector   6, 14   Standard CAN (ISO 15765-4, J2284-3)  High Speed GMLAN   500kbps    11 bits          Primary Powertrain Bus
+  Primary Data Link Connector   12, 13  ???                                  High Speed GMLAN   500kbps    ???              Chassis Expansion Bus
+  Auxillary Data Connector      3, 11   ???                                  High Speed GMLAN   500kbps    ???              High Volt Energy Management
+  Auxillary Data Connector      12, 13  ???                                  High Speed GMLAN   500kbps    ???              High Volt Powertrain Expansion Bus
+
+The Primary Powertrain Bus is easily accessible via inexpensive tools. It has been said that all data is gatewayed to the primary DLC,
+and that the right-hand side was is really only useful for service programming of specific modules.
+
+PRIMARY POWERTRAIN BUS - KNOWN MESSAGES
+
+Bytes are numbered B1 to B8 not B0-B7
+bits are numbered bit0 to bit7
+
+	ID=0C9	B5	Accelerator 0 (0%) to 254 (100%)
+
+        ID=0F1	B2	Brake 0 (0%) to unknown (perhaps 254)
+			Typical pressure on brake pedal generates about 30
+
+	ID=135	B1	Drive position 0=park, 1=neutral, 2=drive/L, 3=reverse
+
+	ID=1A1	B8	Accelerator 0 (0%) to 254 (100%)
+
+	ID=1C3	B8	Accelerator 0 (0%) to 254 (100%)
+
+	ID=1EF	B3,B4	Gas engine rpm (in rpm)
+
+	ID=1F5	B4	Shift position PRNDL 1=park, 2=reverse, ?=neutral, ?=drive, ?=low
+
+	ID=206	B1,B2	Battery SOC (.250kWh units, possibly .244kWh)
+
+	ID=32A	B1-B4	GPS Latitude in milliarcseconds (appears to be only cars with OnStar)
+		B5-B8	GOS Longitude in millarcseconds (appears to be only cars with OnStar)
+
+	ID=3E9	B1-B2	Speed in 1/100mph steps (e.g.; 55pmh would be 0x157c)
+
+	ID=0BC	B1	Bit 7 set indicates the car is on, and bit 4 set indicates the car is off
+
+	ID=3E3	B4-B5	Battery kWh ???
+
+	ID=4C1	B5	Outside temperature in degrees fahrenheit with an offset of 50 (0x76 would be 68 degrees F)
+			For German (Celsius) T = (hexindez(CAN ID 4C1 B5) / 2 ) - 40
+
+	ID=514	B1-B8	VIN (part 1)
+	ID=4E1	B1-B8	VIN (part 2)
+			Take "1" + ID=514 + ID=4E1 to generate entire 17 character VIN
+			Every Byte read as ASCII Code
+
+PRIMARY POWERTRAIN BUS - ENHANCED DIAGNOSTICS
+
+http://www.canbushack.com/blog/index.php?title=service-s-please&more=1&c=1&tb=1&pb=1
+http://gm-volt.com/forum/showthread.php?12958-CAN-bus-reading-remote-viewing-of-charge-state&p=227238#post227238
+
+TX 7E4      8 06 2C FE 43 69 43 68 00   (input: config for voltage/current of charger)
+RX 7EC      8 02 6C FE AA AA AA AA AA   (OK?)
+
+TX 7E4      8 03 AA 04 FE 00 00 00 00   (input for display results)
+RX 5EC      8 FE 43 70 00 00 00 00 00   (results, ~160 reads for a few seconds)
+
+	ID=5EC	B2	Charging Current units 0.2 A (ex. 0x43 = 13.4 A)
+		B3	Charging Voltage units 2 V (ex. 0x70 = 224 V)
+
+Tachy writes: To request current and voltage of the charger and the outside temperature, you have to send the following sequence:
+ 
+	7E4      8 10 08 2C FE 43 69 43 68 
+	7E4      8 21 80 1F 00 00 00 00 00 
+	7E4      8 03 AA 04 FE 00 00 00 00
+ 
+The answer (160 times) is:
+ 
+	5EC      8 FE xx yy zz 00 00 00 00
+ 
+	xx = Charging Current, units 0.2 A (ex. 0x43 = 13.4 A)
+	yy = Charging Voltage, units 2 V (ex. 0x70 = 224 V)
+	zz = outside temperature, units 0,5°C, offset +40 ( ex. 0x60 => 8°C )
+
+Summary by nie-mehr-benzin.de:
+
+  One Single PID:
+    7E4   8 04 2C FE <PID> 00 00 00
+
+  Two PIDs:
+    7E4   8 06 2C FE <PID1> <PID2> 00
+
+  Three PIDs:
+    7E4   8 10 08 2C FE <PID1> <PID2>
+    7E4   8 21 <PID3> 00 00 00 00 00
+
+  Byte 1 is the Message length
+
+  With three PIDs, Byte 1 of the first set is 0x10 = 16 Bytes = two requests with 8 Bytes.
+  For the complete message, the length is "08" ( command "request" (0x2CFE) + 3 PIDs), 
+  0x21 in the first Byte of the second requests means "follows" , i think.
+
+  The known PIDs are so far:
+
+    request over 7E4, answer in 5EC:
+      Onboard charger current: 0x4369
+      Onboard charger voltage: 0x4368
+      outside temperature (filtered): 0x801F
+      outside temperature (raw): 0x801E
+      High Voltage battery Temperature: 0x434F
+      Power Electronics Cooling Loop temperature: 0x1C43
+
+    request over 7E0, answer in 5E8:
+      ambient temperature: 0x0046
+
+  Examples:
+
+    To request the High Voltage Battery temperature in one single PID, you have to request:
+
+      7E4   8 04 2C FE 43 4F 00 00 00   (command: request 0x434F)
+      7EC   8 02 6C FE AA AA AA AA AA   (answer: OK)
+
+      7E4   8 03 AA 04 FE 00 00 00 00   (command: display data)
+      5EC   8 FE 30 00 00 00 00 00 00   (answer: HV Temp in Byte 2, 0x30 => 8°C (unit 1 °C offset 40) )
+
+    to request the ambient temperature:
+
+      7E0   8 04 2C FE 00 46 00 00 00   (command: request 0x0046)
+      7E8   8 02 6C FE AA AA AA AA AA   (answer: OK)
+
+      7E0   8 03 AA 04 FE 00 00 00 00   (command: display data)
+      5E8   8 FE 2F 00 00 00 00 00 00   (answer: HV Temp in Byte 2, 0x2F => 7°C (unit 1 °C offset 40) )
+
+Explanatory notes by Burro:
+
+  I have been watching this thread for a few days. I don't have a Volt but I do have extensive experience with automotive
+  CAN bus applications and I think I can add some value to the discussion.
+
+  According to the bus data presented above the DashDaq is using mode 0x2C to request the identifiers. The message
+  structure for mode 0x2C for one, two and three parameters is as described above. Using that example, the ID 0x7E4
+  is the battery module, 8 is the message length, 04 is the significant bytes in current message, 2C is the
+  mode(dynamically defined data identifier), FE is the requested response ID and the next two bytes are the PID.
+
+  The response is as follows: 0x7EC is the battery module response (0x7E4 + 0x08). This offset id response always holds
+  true, that is why you see 0x7E8 as the response to a 0x7E0(engine controller) request. 8 is the message length again.
+  6C is the affirmative response to the 2C request(0x2C + 0x40). This holds true for any mode request(mode 0x22 request
+  should be affirmed with a 0x62 in the response). If you get a 7F in the response, this means there is an error with
+  the mode request, either it isnt supported or there is a problem with the way the format was requested. FE is the
+  response ID as requested in the previous message. You can request basically any ID between 00-FF. It is just a way
+  for the tool to recognize which identifier(s) are being broadcast. The rest of the bytes in the response are just
+  padding so that it is 8 bytes long.
+
+  The next request is 0x7E4 again, letting the bus know you are asking for a response from the battery module. 8 is the
+  message length. 03 is the significant bytes in the message. AA is read data by packet id, which is the ID you requested
+  in the first message(FE). 04 is the next byte and that lets the module know you are looking for a fast response rate.
+  Decreasing numbers here means decreasing response speed. 01 will get you one response and 00 will stop the response
+  all together. The next byte in the message is FE and it lets you know you are getting the PIDs requested in that
+  message as set up in the first message. The rest of the bytes are padding once again.
+
+  Finally the response is 0x5E8. This is the ID assigned to the battery module for dynamically defined responses.
+  It is 0x200 less than the standard response ID and should hold true for any module request. As an example, a request
+  from 0x7E0 should generate a response from 0x7E8 unless you are asking for dynamically defined data in which case it
+  will respond with 0x5E8(0x7E8-0X200). 8 is the message length. FE is the response ID you set up in the first message.
+  2F is the data and rest is padding.
+
+  This is a good way to reduce the clutter on the bus because you can request and receive multiple pids in one shot. As
+  opposed to mode 22 which nets you one response per request. If you want to set up more than three you can just change
+  the response ID from FE to one of the others like FD, FC, FB.... add your PIDs and then ask for the response. 
+
+  A couple of quick notes. If you want to receive the messages for longer than about three seconds you will need to send
+  the 0x101 message that was questioned in previous posts. This is the tester present message and it lets the module
+  know you are still there and expecting a response. All of the generic OBD messages should work in this mode as well.
+  The generic engine RPM ID is 0x0C(or 0x000C). In your original message if you specify this ID you should get engine
+  RPM (make sure you ask 0x7E0 for this information). There are generic OBD Id's all over the net just use your favorite
+  search engine. Finally, these PIDs may also work for mode 22 requests so those of you with a scangauge that are brave
+  enough to still use it, should be able to code it in xgauge. Be cautious you don't clog up the CAN bus with too many requests though.
+
+  Sorry for the long post, hopefully some of it makes sense.
+
+Service 0x22 explanation by Burro:
+
+  Service 0x22 is an easier single state call.
+
+  Let say you wanted engine RPM then you would send 
+    7E0 03 22 00 0C 00 00 00 00
+
+  And this will hopefully return:
+    7E8 04 62 00 0C 10 7E 00 00
+
+  Letting A=10 B=7E from the return, RPM = (A*255+b)/4 or 1055 RPM. 
+
+  Format of the return data is
+    requsedID+0x08, 
+    length, 
+    confirm of requested mode+0x40 (i.e. 22 + 40)
+    2 bytes for PID
+    length-2 bytes of data
+
+  For your request for OAT
+    7E0 03 22 00 46 00 00 00 00
+
+  would response something like
+    7E8 03 62 00 46 30 00 00 00 00 
+
+  (answer as before is Temp (now in in Byte 4) where 0x30 => 8°C (unit 1 °C offset 40) )
+
+From WopOnTour:
+
+The Volt has 27 primary electronic control modules all networked on the GM-LAN (CAN) networks which include:
+
+  ????? Auxillary (14V) Power Module
+  ????? Battery Charger Control Module
+  ????? Battery Energy Control Module
+  ????? Coolant Heater Control Module
+  ????? Drive Motor 1 Control Module
+  ????? Drive Motor 2 Control Module
+  ????? Electric A/C Compressor Control Module
+  0x7e0 Engine Control Module
+  ????? Fuel Pump Control Module
+  0x7e1 Hybrid Powertrain Control Module A
+  0x7e4 Hybrid Powertrain Control Module B
+  0x7e2 Transmission Control Module
+  ????? Park Brake Control Module
+  ????? Multi-Axis Acceleration Sensor Module
+  ????? Electronic Brake Control Module
+  ????? Variable Power Steering Control Module
+  ????? Steering Wheel Angle Sensor Module
+  ????? Body Control Module
+  ????? Instrument Panel Cluster
+  ????? Inflatable Restraints Sensing Diagnostic Module
+  ????? Passenger Presence System Module
+  ????? Radio Control Module
+  ????? Telematics Communication Interface Module
+  ????? Remote Heater and Air Conditioning Control Module
+  ????? Front Seat Heating Control Module
+  ????? Keyless Entry Control Module
+  ????? Parking Assist Control Module
+
+Additionally there a few additional "master-slave" modules operating on Local Interconnect Networks (LIN) dedicated to some primary functions (such as power windows).
+
+Notes the Burro:
+
+
+  0x7e0:
+
+  Name	                          ShortName	 Mode-PID #	 Equation 	Units	# of Bytes
+  Ambient Air Temp                     AAT	  22-0046	   X-40          °C	      1
+  Control Module Voltage	     VPWR         22-0042	  X*.001          V           2
+  Engine Coolant Temp	             ECT          22-0005	   X-40          °C	      1
+  Intake Manifold Absolute Pressure  MAP          22-000B	   X+0           kPa	      1
+  Engine RPM	                     RPM          22-000C         X*.25          rpm          2
+  Vehicle Speed Sensor	             VSS          22-000D          X+0           kph          1
+  Ignition Timing Advance
+  for #1 Cylinder	          SPARKADV        22-000E   	(X*.5)-64	 BTDC         1
+  Intake Air Temperature             IAT          22-000F          X-40          °C           1
+  Commanded Throttle
+  Actuator Control	             TAC          22-004C	X*(100/255)	  %	      1
+  Hybrid/EV Battery Pack
+  Remaining Charge	           BAT_PWR        22-005B	X*(100/255)	  %	      1
+
+  Name				Mode-PID#	Scaling		Units
+  Fuel System Status		22-1131	        X+0		State Encoded
+  AC High Side Pressure		22-1564	        Unknown	        kPa
+  Short Term Fuel Trim Bank 1	22-1570	        X*(100/255)      %
+  Short Term Fuel Trim Bank 2	22-1571	        X*(100/255)      %
+  Long Term Fuel Trim Bank 1	22-1572	        X*(100/255)      %
+  Long Term Fuel Trim Bank 2	22-1573         X*(100/255)	 %
+  Torque Delivered Signal		22-1A2D	        Unknown          NM
+
+  0x7e4:
+
+  Name				Mode-PID#	Scaling			Units
+  Output Shaft Speed		22-1942	        X*(1/4) or (1/8)	RPM
+  Gear Ratio			22-19A1	        Might be X*(4/256)	
+  Trans Fluid Temp		22-1940	        X-40		        °C
+  Transmission ISS		22-1941	        Might be X*(8192/65536) RPM
