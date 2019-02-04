@@ -293,7 +293,7 @@ namespace CAN232_Monitor
                         {
                             string mess = split[i];
                             //t7E8803410D0055555555
-                            if (mess.Contains("t7E") || mess.Contains("t3E9"))
+                            if ((mess.Contains("t7E") || mess.Contains("t3E9"))&&false)
                             {
                                 inFramList.Add(mess);
                                 //t7E8803410D0055555555
@@ -346,27 +346,29 @@ namespace CAN232_Monitor
                             }
 
 
-                            if (mess.Contains("t3E9") && false)
+                            if (mess.Contains("t0F1") && true)
                             {
                                 //01234 56 78 9  11 13 15 17 19 
                                 //t3E98 00 00 00 13 00 00 00 13
-                                string t = mess.Substring(9, 2);
-                                
-                                {
-                                    double speedDatamilsPerH = Convert.ToInt16(mess.Substring(5, 4), 16);
-                                    double speedDataKmPerH = (double)((double)speedDatamilsPerH / 100) / 0.62137;
-                                    t = mess.Substring(mess.Length - 4, 4);
-                                    double speedDataTitmeS = (double)Convert.ToInt16(mess.Substring(mess.Length - 4, 4), 16) / 1000;
-                                    string toText = speedDataKmPerH.ToString();
-                                    
-                                    double temp_speedDataTitmeS = speedDataTitmeS;
 
-                                    if (speedDataTitmeS < lastSpeedTime)
+                                //"t0F1 4 34 00 00 40 9633"
+                                string t ;
+
+                                {
+                                    double press = Convert.ToInt16(mess.Substring(7, 2), 16);
+                                    //double speedDataKmPerH = (double)((double)speedDatamilsPerH / 100) / 0.62137;
+                                    t = mess.Substring(mess.Length - 4, 4);
+                                    double pressDataTitmeS = Convert.ToUInt16(t, 16);
+                                    string toText = press.ToString();
+                                    
+                                    double temp_speedDataTitmeS = pressDataTitmeS;
+
+                                    if (pressDataTitmeS < lastSpeedTime)
                                     {
                                         temp_speedDataTitmeS += 60;
                                     }
 
-                                    acc = (double)(speedDataKmPerH - lastSpeed) / (double)(temp_speedDataTitmeS - lastSpeedTime);
+                                    acc = press; // (double)(speedDataKmPerH - lastSpeed) / (double)(temp_speedDataTitmeS - lastSpeedTime);
                                     //acc = (double)acc;
 
                                     new System.Threading.Thread(() =>
@@ -382,8 +384,8 @@ namespace CAN232_Monitor
                                     }).Start();
 
 
-                                    lastSpeedTime = speedDataTitmeS;
-                                    lastSpeed = speedDataKmPerH;
+                                    lastSpeedTime = pressDataTitmeS;
+                                    //lastSpeed = speedDataKmPerH;
                                 }
 
                                 //this.Invoke(new EventHandler(DisplayText));
@@ -627,49 +629,49 @@ namespace CAN232_Monitor
             double temp = 0;
 
             temp = Convert.ToDouble(textBox1.Text);
-            if( acc<temp)
+            if( acc>temp)
                 pictureBox1.Visible = true;
             else
                 pictureBox1.Visible = false;
 
             temp = Convert.ToDouble(textBox2.Text);
-            if (acc < temp)
+            if (acc > temp)
                 pictureBox2.Visible = true;
             else
                 pictureBox2.Visible = false;
 
             temp = Convert.ToDouble(textBox3.Text);
-            if (acc < temp)
+            if (acc > temp)
                 pictureBox3.Visible = true;
             else
                 pictureBox3.Visible = false;
 
             temp = Convert.ToDouble(textBox4.Text);
-            if (acc < temp)
+            if (acc > temp)
                 pictureBox4.Visible = true;
             else
                 pictureBox4.Visible = false;
 
             temp = Convert.ToDouble(textBox5.Text);
-            if (acc < temp)
+            if (acc > temp)
                 pictureBox5.Visible = true;
             else
                 pictureBox5.Visible = false;
 
             temp = Convert.ToDouble(textBox6.Text);
-            if (acc < temp)
+            if (acc > temp)
                 pictureBox6.Visible = true;
             else
                 pictureBox6.Visible = false;
 
             temp = Convert.ToDouble(textBox7.Text);
-            if (acc < temp)
+            if (acc > temp)
                 pictureBox7.Visible = true;
             else
                 pictureBox7.Visible = false;
 
             temp = Convert.ToDouble(textBox8.Text);
-            if (acc < temp)
+            if (acc > temp)
                 pictureBox8.Visible = true;
             else
                 pictureBox8.Visible = false;
@@ -1147,6 +1149,16 @@ namespace CAN232_Monitor
         }
 
         private void textBox16_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
         {
 
         }
